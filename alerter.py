@@ -11,9 +11,9 @@ load_dotenv()
 # Initialize the client
 client = InfisicalSDKClient(host="https://app.infisical.com")
 
-client.auth.token_auth.login(token="st.ed9ce2ba-a5b5-43ff-a7cc-27afdd7f5255.f999437722ad71ae78fcf60e76ded398.0508bcf068d2f835eed124008b52803c")
+client.auth.token_auth.login(token="")
 
-secret_response = client.secrets.get_secret_by_name(secret_name="SLACK_WEBHOOK_URL", project_id="c7df3875-7e43-4d59-abea-caf68dd3a87c", environment_slug="dev", secret_path="/")
+secret_response = client.secrets.get_secret_by_name(secret_name="SLACK_WEBHOOK_URL", project_id="", environment_slug="dev", secret_path="/")
 SLACK_URL = secret_response.secretValue
 
 def send_slack_alert(message):
