@@ -2,20 +2,28 @@ import requests
 import json
 import os
 from datetime import datetime
-from infisical_sdk import InfisicalSDKClient
-from dotenv import load_dotenv
-load_dotenv()
 
-# SLACK_URL = os.getenv("SLACK_WEBHOOK_URL")
+SLACK_URL = os.getenv("SLACK_WEBHOOK_URL")
 
-# Initialize the client
-client = InfisicalSDKClient(host="https://app.infisical.com")
+if not SLACK_URL:
+    print("SLACK_WEBHOOK_URL not found in environment. Falling back to Infisical SDK for local testing...")
+    from infisical_sdk import InfisicalSDKClient  # type: ignore
+    from dotenv import load_dotenv
+    load_dotenv()
 
-client.auth.token_auth.login(token="")
+    # Initialize the client
+    client = InfisicalSDKClient(host="https://app.infisical.com")
 
-secret_response = client.secrets.get_secret_by_name(secret_name="SLACK_WEBHOOK_URL", project_id="", environment_slug="dev", secret_path="/")
-SLACK_URL = secret_response.secretValue
+    client.auth.token_auth.login(token=os.getenv("INFISICAL_TOKEN"))
 
+    secret_response = client.secrets.get_secret_by_name(secret_name="SLACK_WEBHOOK_URL", project_id=os.getenv("INFISICAL_PROJECT_ID"), environment_slug="dev", secret_path="/")
+    SLACK_URL = secret_response.secretValue
+    print("SLACK_WEBHOOK_URL fetched successfully from Infisical SDK.")
+else:
+    print("SLACK_WEBHOOK_URL found in environment. Using production mode.")
+
+
+# Main processing function to send alert to Slack
 def send_slack_alert(message):
     if not SLACK_URL:
         print("SLACK_WEBHOOK_URL is not set. Cannot send alert.")

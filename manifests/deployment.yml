@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-monitoring-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-monitoring-operator
+  template:
+    metadata:
+      labels:
+        app: k8s-monitoring-operator
+    spec:
+      containers:
+        - name: k8s-monitoring-operator
+          image: k8s-monitoring-operator:latest
+          imagePullPolicy: Never        # ← important! uses local image
+          env:
+            - name: INFISICAL_TOKEN
+              value: "st.605d5e84-b038-4522-b64c-1632e63855ec.bba0579bd5dc579631217bc8797746d5.cd18f38267f14946e6eb35fb089053c4"
+            - name: INFISICAL_PROJECT_ID
+              value: "c7df3875-7e43-4d59-abea-caf68dd3a87c"
+      serviceAccountName: k8s-monitoring-operator-sa

@@ -1,3 +1,5 @@
 requests
 infisicalsdk
 python-dotenv
+kopf
+kubernetes
