@@ -1,0 +1,44 @@
+---
+# token AUTH
+apiVersion: v1
+kind: Secret
+metadata:
+  name: token-auth-credentials
+type: Opaque
+data:
+  accessToken: c3QuZDMxN2U4MWMtMjZlYi00NDA2LTkyOWUtODk3N2YyYTY4ZTdlLjg4NzQ2YTI4YjFjYmIxM2Q0OWYzNzdmNDRlZDc4NGNlLjVkOWJlNWYzNzI5NGY1YzdjMGNiYTYyNGM0Y2EzYjc3w58=
+---
+# Secret Store
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: infisical-store
+spec:
+  provider:
+    infisical:
+      hostAPI: https://app.infisical.com
+      auth:
+        tokenAuthCredentials:
+          accessToken:
+            name: token-auth-credentials
+            key: accessToken
+      secretsScope:
+        projectSlug: k8s-resource-operator-cw2c
+        environmentSlug: dev
+---
+# External Secret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: app-secrets
+spec:
+  secretStoreRef:
+    name: infisical-store
+    kind: SecretStore
+  target:
+    name: app-secrets
+    creationPolicy: Owner
+  data:
+    - secretKey: SLACK_WEBHOOK_URL
+      remoteRef:
+        key: SLACK_WEBHOOK_URL

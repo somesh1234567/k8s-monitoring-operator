@@ -1,0 +1,13 @@
+infisical:
+  image:
+    repository: infisical/infisical
+    tag: "v0.151.0"  # Check https://hub.docker.com/r/infisical/infisical/tags for latest
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+
+ingress:
+  enabled: true
+  nginx:
+    enabled: true
+
+slack token: st.d317e81c-26eb-4406-929e-8977f2a68e7e.88746a28b1cbb13d49f377f44ed784ce.5d9be5f37294f5c7c0cba624c4ca3b77ß
