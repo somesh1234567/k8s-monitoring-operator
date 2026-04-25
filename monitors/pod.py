@@ -9,17 +9,6 @@ from utils.cooldown import can_send_alert
 from alerter import send_slack_alert
 from config import MEMORY_THRESHOLD_MB, CPU_THRESHOLD_MILLICORES, EXCLUDED_NAMESPACES
 
-# EXCLUDED_NAMESPACES = ['kube-system']
-
-@kopf.on.startup()
-def startup_fn(logger, **kwargs):
-    logger.info("Starting up the operator. Monitoring has begun......!!!")
-    try:
-        config.load_incluster_config()
-        print("Running inside Kubernetes cluster")
-    except Exception:
-        config.load_kube_config()
-        print("Running outside Kubernetes cluster")
 
 @kopf.timer('', 'v1', 'pods', interval=30)
 def monitor_pods(body, logger, **kwargs):

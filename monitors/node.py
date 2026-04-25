@@ -8,16 +8,6 @@ from alerter import send_slack_alert
 alert_cooldown = {} #type: dict[str, float]
 COOLDOWN_PERIOD = 300  # Cooldown period in seconds (5 minutes)
 
-@kopf.on.startup()
-def startup_fn(logger, **kwargs):
-    logger.info("Starting up the operator. Monitoring has begun......!!!")
-    try:
-        config.load_incluster_config()
-        print("Running inside Kubernetes cluster")
-    except:
-        config.load_kube_config()
-        print("Running outside Kubernetes cluster")
-
 # Watch node events and log them
 @kopf.on.event('', 'v1', 'nodes')
 def node_event(event, body, logger, **kwargs):
